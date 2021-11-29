@@ -11,13 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TodoListUser {
 
     HomePage todomvcApplicationHomePage;
-
     TodoList todoList;
 
     @Step
-    public void startsWithAnEmptyTodoList() {
-        todomvcApplicationHomePage.open();
-    }
+    public void startsWithAnEmptyTodoList() { todomvcApplicationHomePage.open(); }
 
     @Step
     public void adds_a_task(String taskName) {

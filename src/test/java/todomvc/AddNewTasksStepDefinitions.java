@@ -15,6 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.thucydides.core.annotations.Steps;
+import todomvc.actions.navigate.NavigateActions;
 import todomvc.steps.TodoListUser;
 
 import java.lang.reflect.Type;
@@ -61,14 +62,18 @@ public class AddNewTasksStepDefinitions {
     @Steps
     TodoListUser todoUser;
 
+    @Steps
+    NavigateActions navigate;
+
     @Given("^that (?:.*) has an empty todo list$")
     public void that_James_has_an_empty_todo_list() throws Exception {
-        todoUser.startsWithAnEmptyTodoList();
+        navigate.toTheApplicationHomePage();
+
     }
 
     @Given("^that (?:.*) has a list containing (.*)$")
     public void has_a_list_containing(List<String> tasks) throws Exception {
-        todoUser.startsWithAnEmptyTodoList();
+        navigate.toTheApplicationHomePage();
         tasks.forEach(
                 task -> todoUser.adds_a_task(task)
         );
