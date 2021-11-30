@@ -6,22 +6,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import io.cucumber.java.DefaultDataTableCellTransformer;
 import io.cucumber.java.DefaultDataTableEntryTransformer;
 import io.cucumber.java.DefaultParameterTransformer;
-import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.thucydides.core.annotations.Steps;
+import todomvc.actions.addTasks.AddTaskActions;
 import todomvc.actions.addTasks.AddTasksActions;
 import todomvc.actions.navigate.NavigateActions;
-import todomvc.steps.TodoListUser;
+import todomvc.actions.todolist.TodoListQuestions;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class AddNewTasksStepDefinitions {
     // register data type handler for converting lists
@@ -60,14 +61,18 @@ public class AddNewTasksStepDefinitions {
 //        return Arrays.asList(values);
 //    }
 
-    @Steps
-    TodoListUser todoUser;
 
     @Steps
     NavigateActions navigate;
 
     @Steps
     AddTasksActions addTasks;
+
+    @Steps
+    AddTaskActions addTask;
+
+    @Steps
+    TodoListQuestions theTodoList;
 
 
     @Given("^that (?:.*) has an empty todo list$")
@@ -85,16 +90,19 @@ public class AddNewTasksStepDefinitions {
 
     @When("^s?he adds '(.*)' to (?:his|her) list$")
     public void he_adds_to_his_list(String taskName) throws Exception {
-        todoUser.adds_a_task(taskName);
+        addTask.withName(taskName);
     }
 
     @Then("^'(.*)' should be recorded in (?:his|her) list$")
     public void should_be_recorded_in_his_list(String taskName) throws Exception {
-        todoUser.should_see_task(taskName);
+        assertThat(theTodoList.contents()).contains(taskName);
+        // removed otl - todoUser.should_see_task(taskName);
     }
 
     @Then("^(?:his|her) todo list should contain (.*)$")
     public void list_should_contain(List<String> tasks) throws Exception {
-        todoUser.should_see_tasks(tasks);
+
+        assertThat(theTodoList.contents()).hasSameElementsAs(tasks);
+
     }
 }
